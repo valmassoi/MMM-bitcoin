@@ -54,6 +54,7 @@ Module.register("MMM-bitcoin", {
 
   socketNotificationReceived: function(notification, payload) {
     if (notification === "TICKERS_RESULT") {
+      var self = this;
       this.result = payload;
       this.updateDom(self.config.fadeSpeed);
     }

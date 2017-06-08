@@ -4,7 +4,22 @@ Module.register("MMM-bitcoin", {
 
   result: {},
   defaults: {
-    updateInterval: 60000
+    fiat: 'usd',
+    showBefore: null,
+    exchange: 'bitstamp',
+    updateInterval: 60000,
+
+    // Used to work out url and symbols
+    fiatTable: {
+      usd: {
+        symbol: '$',
+        exchangeCode: 'btcusd'
+      },
+      eur: {
+        symbol: '€',
+        exchangeCode: 'btceur'
+      }
+    }
   },
 
   getStyles: function() {
@@ -23,10 +38,17 @@ Module.register("MMM-bitcoin", {
 
     var data = this.result;
     var symbolElement =  document.createElement("span");
-    var symbol = "Bitstamp";
+    var exchange = this.config.exchange;
+    var fiat = this.config.fiat;
+    var fiatSymbol = this.config.fiatTable[fiat].symbol;
     var lastPrice = data.last;
+    if (this.config.showBefore == null) {
+      var showBefore = this.config.exchange;
+    } else {
+      var showBefore = this.config.showBefore
+    }
     if (lastPrice) {
-      symbolElement.innerHTML = symbol + ' $';
+      symbolElement.innerHTML = showBefore + ' ' + fiatSymbol;
       wrapper.appendChild(symbolElement);
       var priceElement = document.createElement("span");
       priceElement.innerHTML = lastPrice;
@@ -48,7 +70,8 @@ Module.register("MMM-bitcoin", {
   },
 
   getTickers: function () {
-    var url = 'https://www.bitstamp.net/api/ticker_hour/';
+    var fiat = this.config.fiat;
+    var url = 'https://www.bitstamp.net/api/v2/ticker/' + this.config.fiatTable[fiat].exchangeCode + '/';
     this.sendSocketNotification('GET_TICKERS', url);
   },
 

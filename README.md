@@ -12,6 +12,8 @@ modules: [
     module: 'MMM-bitcoin',
     position: 'top_right',
     config: {
+      fiat: 'usd',          // 'usd' and 'eur' available, defaults to 'usd'
+      showBefore: 'foo',    // will display before the bitcoin price, default 'Bitstamp'
       updateInterval: 60000 // update interval in milliseconds
     }
   },
